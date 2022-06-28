@@ -2,13 +2,14 @@ syntax = "proto3";
 
 import "google/protobuf/timestamp.proto";
 
-option csharp_namespace="Reservations.Types";
+option csharp_namespace="Registrations.Types";
 
 message RegistrationRequest {
-    Student student = 1;
-    Course course = 2;
-    Offering offering = 3;
-    google.protobuf.Timestamp created = 4;
+    string RequestId = 1;
+    Student student = 2;
+    Course course = 3;
+    Offering offering = 4;
+    google.protobuf.Timestamp created = 5;
 
 
     message Student {

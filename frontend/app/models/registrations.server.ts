@@ -2,6 +2,7 @@ import type { Registration, User } from "@prisma/client";
 import { prisma } from "~/db.server";
 import { DaprClient } from "dapr-client";
 import { RegistrationRequest } from "~/models/types/registration-request";
+import { RegistrationStatusChanged_Status } from "./types/registration-status-change";
 export type { Registration } from "@prisma/client";
 
 const client = new DaprClient(
@@ -10,6 +11,31 @@ const client = new DaprClient(
 );
 const PUB_SUB_NAME = "registrations";
 const TOPCIC_NAME = "registration-requested";
+
+export async function changeRegistrationStatus({
+  registrationId,
+  status,
+}: {
+  registrationId: string;
+  status: RegistrationStatusChanged_Status;
+}) {
+  const registration = await prisma.registration.findFirst({
+    where: {
+      id: registrationId,
+    },
+  });
+  if (!registration) {
+    throw new Error("Registration not found");
+  }
+  await prisma.registration.update({
+    where: {
+      id: registrationId,
+    },
+    data: {
+      status: status.toString(),
+    },
+  });
+}
 
 export async function createRegistration({
   courseId,
@@ -46,6 +72,7 @@ export async function createRegistration({
       numberOfDays: registration.course.numberOfDays,
     },
     created: new Date(),
+    RequestId: registration.id, // add this
   };
   const message = RegistrationRequest.toJSON(eventToPublish) as Object;
 

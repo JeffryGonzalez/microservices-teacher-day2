@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace="Registrations.Types";
+
+message RegistrationStatusChanged {
+    string requestId = 1;
+    google.protobuf.Timestamp timestamp = 2;
+
+    Status status = 3; 
+    
+    enum Status {
+        PENDING = 0;
+        PROCESSING = 1;
+        COMPLETED = 2;
+        FAILED = 3;
+    }
+}

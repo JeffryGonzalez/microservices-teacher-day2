@@ -5,6 +5,7 @@ import * as _m0 from "protobufjs/minimal";
 export const protobufPackage = "";
 
 export interface RegistrationRequest {
+  RequestId: string;
   student: RegistrationRequest_Student | undefined;
   course: RegistrationRequest_Course | undefined;
   offering: RegistrationRequest_Offering | undefined;
@@ -30,6 +31,7 @@ export interface RegistrationRequest_Offering {
 
 function createBaseRegistrationRequest(): RegistrationRequest {
   return {
+    RequestId: "",
     student: undefined,
     course: undefined,
     offering: undefined,
@@ -42,28 +44,31 @@ export const RegistrationRequest = {
     message: RegistrationRequest,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
+    if (message.RequestId !== "") {
+      writer.uint32(10).string(message.RequestId);
+    }
     if (message.student !== undefined) {
       RegistrationRequest_Student.encode(
         message.student,
-        writer.uint32(10).fork()
+        writer.uint32(18).fork()
       ).ldelim();
     }
     if (message.course !== undefined) {
       RegistrationRequest_Course.encode(
         message.course,
-        writer.uint32(18).fork()
+        writer.uint32(26).fork()
       ).ldelim();
     }
     if (message.offering !== undefined) {
       RegistrationRequest_Offering.encode(
         message.offering,
-        writer.uint32(26).fork()
+        writer.uint32(34).fork()
       ).ldelim();
     }
     if (message.created !== undefined) {
       Timestamp.encode(
         toTimestamp(message.created),
-        writer.uint32(34).fork()
+        writer.uint32(42).fork()
       ).ldelim();
     }
     return writer;
@@ -77,24 +82,27 @@ export const RegistrationRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          message.RequestId = reader.string();
+          break;
+        case 2:
           message.student = RegistrationRequest_Student.decode(
             reader,
             reader.uint32()
           );
           break;
-        case 2:
+        case 3:
           message.course = RegistrationRequest_Course.decode(
             reader,
             reader.uint32()
           );
           break;
-        case 3:
+        case 4:
           message.offering = RegistrationRequest_Offering.decode(
             reader,
             reader.uint32()
           );
           break;
-        case 4:
+        case 5:
           message.created = fromTimestamp(
             Timestamp.decode(reader, reader.uint32())
           );
@@ -109,6 +117,7 @@ export const RegistrationRequest = {
 
   fromJSON(object: any): RegistrationRequest {
     return {
+      RequestId: isSet(object.RequestId) ? String(object.RequestId) : "",
       student: isSet(object.student)
         ? RegistrationRequest_Student.fromJSON(object.student)
         : undefined,
@@ -126,6 +135,7 @@ export const RegistrationRequest = {
 
   toJSON(message: RegistrationRequest): unknown {
     const obj: any = {};
+    message.RequestId !== undefined && (obj.RequestId = message.RequestId);
     message.student !== undefined &&
       (obj.student = message.student
         ? RegistrationRequest_Student.toJSON(message.student)
@@ -147,6 +157,7 @@ export const RegistrationRequest = {
     object: I
   ): RegistrationRequest {
     const message = createBaseRegistrationRequest();
+    message.RequestId = object.RequestId ?? "";
     message.student =
       object.student !== undefined && object.student !== null
         ? RegistrationRequest_Student.fromPartial(object.student)
